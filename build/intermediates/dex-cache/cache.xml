@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\moi\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit\retrofit\1.9.0\a681c044244d9fc375198588297a39ba78028423\retrofit-1.9.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a681c044244d9fc375198588297a39ba78028423">
+        <dex dex="D:\Projects\AndroidStudioProjects\AndroidStudioProjects\CQUPTCard\app\build\intermediates\pre-dexed\debug\retrofit-1.9.0-5fab44ee963f3ed6477127ba0b8f0bdfeea0118a.jar" />
+    </item>
+    <item
+        jar="C:\Users\moi\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp\2.4.0\40340c0748190fe897baf7bffbc1b282734294e5\okhttp-2.4.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="D:\Projects\AndroidStudioProjects\AndroidStudioProjects\CQUPTCard\app\build\intermediates\pre-dexed\debug\okhttp-2.4.0-524bd66f459ae62def20f3ce01083b56402f728f.jar" />
+    </item>
+    <item
+        jar="C:\Users\moi\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.4.0\5b72bf48563ea8410e650de14aa33ff69a3e8c35\okio-1.4.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="D:\Projects\AndroidStudioProjects\AndroidStudioProjects\CQUPTCard\app\build\intermediates\pre-dexed\debug\okio-1.4.0-ebbba644c1dc05e57c059bd6de0acc3c1d76c6f2.jar" />
+    </item>
+    <item
+        jar="C:\Users\moi\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="D:\Projects\AndroidStudioProjects\AndroidStudioProjects\CQUPTCard\app\build\intermediates\pre-dexed\debug\gson-2.3.1-51aa8fc7f38847209cadbd0e17fc6245f50556ab.jar" />
+    </item>
+
+</items>

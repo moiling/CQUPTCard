@@ -1,0 +1,18 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!-- Customize your theme here. -->
+        <item name="android:listDivider">@drawable/divider_bg</item>
+    </style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.NoActionBar">
+        <!-- Actionbar color -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <!--Status bar color-->
+        <item name="colorPrimaryDark">@color/primary_dark_color</item>
+        <item name="colorAccent">@color/primary_color</item>
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
+</resources>
