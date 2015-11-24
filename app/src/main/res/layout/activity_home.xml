@@ -8,10 +8,18 @@
         android:id="@+id/toolbar"
         layout="@layout/layout_toolbar"/>
 
-    <TextView
+    <FrameLayout
         android:layout_below="@+id/toolbar"
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/layout_home_content"/>
+
+        <!--toolbar下方阴影-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/shadow"/>
+    </FrameLayout>
 
 </RelativeLayout>

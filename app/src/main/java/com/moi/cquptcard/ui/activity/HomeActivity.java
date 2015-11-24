@@ -1,11 +1,13 @@
 package com.moi.cquptcard.ui.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.moi.cquptcard.R;
 import com.moi.cquptcard.app.BaseActivity;
@@ -21,7 +23,16 @@ import retrofit.RetrofitError;
 
 public class HomeActivity extends BaseActivity implements IConsumptionVu {
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.list_home_card)
+    RecyclerView mCardList;
+    @Bind(R.id.swipe_refresh_widget)
+    SwipeRefreshLayout mSwipeRefreshWidget;
+    @Bind(R.id.tv_home_empty)
+    TextView mCardEmptyText;
+    @Bind(R.id.home_fab)
+    FloatingActionButton mFab;
 
     private ConsumptionPresenter consumptionPresenter;
 
@@ -34,31 +45,29 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu {
         initToolbar();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        consumptionPresenter.onRelieveView();
+    }
+
     private void initToolbar() {
         mToolbar.setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(mToolbar);
-        //mToolbar.setTitleTextColor(Color.WHITE);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -70,13 +79,10 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu {
     @Override
     public void onFail(RetrofitError e) {
         dismissProgress();
-        Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
-        Log.e("..", e.toString());
     }
 
     @Override
     public void onSuccess(List<ConsumptionBean> consumptions) {
         dismissProgress();
-        Toast.makeText(this, consumptions.get(0).getName(), Toast.LENGTH_SHORT).show();
     }
 }
