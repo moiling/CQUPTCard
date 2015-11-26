@@ -6,19 +6,39 @@ package com.moi.cquptcard.model.bean;
  */
 public class Card {
     private String name;
-    private String cardID;
+    private String cardId;
+    private String money;
+    private String time;
 
-    public Card(String name, String cardID) {
+    public Card(String name, String cardId) {
         this.name = name;
-        this.cardID = cardID;
+        this.cardId = cardId;
     }
 
-    public String getCardID() {
-        return cardID;
+    public String getMoney() {
+        return money;
     }
 
-    public void setCardID(String cardID) {
-        this.cardID = cardID;
+    public Card setMoney(String money) {
+        this.money = money;
+        return this;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public Card setTime(String time) {
+        this.time = time;
+        return this;
+    }
+
+    public String getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
     }
 
     public String getName() {

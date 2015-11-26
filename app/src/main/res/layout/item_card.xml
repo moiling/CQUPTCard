@@ -53,7 +53,7 @@
                         android:textSize="20sp"/>
 
                     <TextView
-                        android:id="@+id/tv_sex"
+                        android:id="@+id/tv_money"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -70,21 +70,20 @@
                     android:layout_gravity="center">
 
                     <TextView
-                        android:id="@+id/tv_major"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="24dp"
-                        tools:text="更新时间：2015-11-22 12:13"
+                        android:text="数据统计时间"
                         android:textColor="@color/secondary_text"/>
 
                     <TextView
-                        android:id="@+id/tv_grade"
+                        android:id="@+id/tv_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="24dp"
-                        tools:text="已借书：0本"
+                        tools:text="2015-11-22 12:13"
                         android:textColor="@color/secondary_text"/>
 
                 </RelativeLayout>
