@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.moi.cquptcard.R;
 import com.moi.cquptcard.model.bean.Card;
+import com.moi.cquptcard.ui.activity.ConsumptionActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         holder.money.setText(money);
         holder.time.setText(time);
 
-        holder.ripple.setOnClickListener(v -> Toast.makeText(mContext, "点击了", Toast.LENGTH_SHORT).show());
+        holder.ripple.setOnClickListener(v -> ConsumptionActivity.actionStart(mContext, card.getCardId()));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         return cards.size();
     }
 
-    class CardsViewHolder extends RecyclerView.ViewHolder {
+    static class CardsViewHolder extends RecyclerView.ViewHolder {
 
         MaterialRippleLayout ripple;
         TextView name;
