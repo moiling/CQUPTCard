@@ -16,6 +16,6 @@ public interface IConsumptionVu {
 
     void onFail(RetrofitError e);
 
-    void onSuccess(List<ConsumptionBean> consumptions);
+    void onSuccess(List<ConsumptionBean> consumptions, String page);
 
 }

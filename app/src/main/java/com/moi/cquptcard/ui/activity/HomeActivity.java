@@ -1,7 +1,9 @@
 package com.moi.cquptcard.ui.activity;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,11 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.moi.cquptcard.R;
-import com.moi.cquptcard.app.APP;
 import com.moi.cquptcard.app.BaseActivity;
 import com.moi.cquptcard.model.bean.Card;
 import com.moi.cquptcard.model.bean.ConsumptionBean;
@@ -77,6 +77,7 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
         mCardList.setAdapter(mCardsAdapter);
         // 根据时候有一卡通来判断是否显示List
         controlList();
+        mFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
         mFab.setOnClickListener(this);
     }
 
@@ -123,11 +124,15 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
     @Override
     public void onFail(RetrofitError e) {
         dismissProgress();
-        Toast.makeText(this, "我的天！居然出错了", Toast.LENGTH_SHORT).show();
+        e.printStackTrace();
+        Snackbar.make(mFab, "我的天！居然出错了", Snackbar.LENGTH_LONG)
+                .setAction("OK", null)
+                .setActionTextColor(getResources().getColor(R.color.accent_color))
+                .show();
     }
 
     @Override
-    public void onSuccess(List<ConsumptionBean> consumptions) {
+    public void onSuccess(List<ConsumptionBean> consumptions, String page) {
         dismissProgress();
         String name = consumptions.get(0).getName();
         String money = consumptions.get(0).getBalance();
@@ -138,7 +143,10 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
             boolean hasThisCard = false;
             for (Card card : cards) {
                 if (card.getCardId().equals(tempId)) {
-                    Toast.makeText(this, "不要重复添加一卡通！", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(mFab, "不要重复添加一卡通", Snackbar.LENGTH_LONG)
+                            .setAction("OK", null)
+                            .setActionTextColor(getResources().getColor(R.color.accent_color))
+                            .show();
                     hasThisCard = true;
                     break;
                 }
@@ -149,7 +157,10 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
                 mCardsAdapter.notifyDataSetChanged();
             }
         } else {
-            Toast.makeText(this, "信息不匹配，不要乱试啊！", Toast.LENGTH_SHORT).show();
+            Snackbar.make(mFab, "信息不匹配，不要乱试啊！", Snackbar.LENGTH_LONG)
+                    .setAction("OK", null)
+                    .setActionTextColor(getResources().getColor(R.color.accent_color))
+                    .show();
         }
     }
 
@@ -171,8 +182,8 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
                                 super.onPositive(dialog);
                                 tempName = edName.getText().toString();
                                 tempId = edId.getText().toString();
+                                // 传1表示每次获取最新一页数据，然后获取第一条就可以了
                                 consumptionPresenter.load(tempId, 1 + "");
-                                Toast.makeText(APP.getContext(), tempName + tempId, Toast.LENGTH_SHORT).show();
                             }
                         })
                         .show();

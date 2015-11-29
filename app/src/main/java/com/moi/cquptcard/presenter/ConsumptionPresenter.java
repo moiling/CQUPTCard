@@ -32,7 +32,7 @@ public class ConsumptionPresenter {
         consumptionModel.loadConsumption(userID, page, new Callback<List<ConsumptionBean>>() {
             @Override
             public void success(List<ConsumptionBean> consumptionBeans, Response response) {
-                v.onSuccess(consumptionBeans);
+                v.onSuccess(consumptionBeans, page);
             }
 
             @Override
