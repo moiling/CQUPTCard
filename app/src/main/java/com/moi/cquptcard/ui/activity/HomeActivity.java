@@ -20,9 +20,12 @@ import com.moi.cquptcard.R;
 import com.moi.cquptcard.app.BaseActivity;
 import com.moi.cquptcard.model.bean.Card;
 import com.moi.cquptcard.model.bean.ConsumptionBean;
+import com.moi.cquptcard.presenter.CardPresenter;
 import com.moi.cquptcard.presenter.ConsumptionPresenter;
 import com.moi.cquptcard.ui.adapter.CardsAdapter;
+import com.moi.cquptcard.ui.view.ICardVu;
 import com.moi.cquptcard.ui.view.IConsumptionVu;
+import com.moi.cquptcard.util.DatabaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.RetrofitError;
 
-public class HomeActivity extends BaseActivity implements IConsumptionVu, View.OnClickListener {
+public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardVu, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -45,6 +48,7 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
     FloatingActionButton mFab;
 
     private ConsumptionPresenter consumptionPresenter;
+    private CardPresenter cardPresenter;
     private CardsAdapter mCardsAdapter;
     private List<Card> cards = new ArrayList<>();
     private String tempName;
@@ -56,8 +60,18 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         consumptionPresenter = new ConsumptionPresenter(this);
+        cardPresenter = new CardPresenter(this);
         initToolbar();
         initContent();
+        initData();
+    }
+
+    private void initData() {
+        // 从数据库中读取所有一卡通信息
+        cards.addAll(DatabaseUtils.loadCards());
+        controlList();
+        mCardsAdapter.notifyItemRangeInserted(0, cards.size());
+        cardPresenter.refresh(cards);
     }
 
     @Override
@@ -79,6 +93,7 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
         controlList();
         mFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
         mFab.setOnClickListener(this);
+        mSwipeRefreshWidget.setOnRefreshListener(this);
     }
 
     private void controlList() {
@@ -110,15 +125,13 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onProcess() {
-        showProgress("加载中");
+        if (!mSwipeRefreshWidget.isRefreshing())
+            showProgress("加载中");
     }
 
     @Override
@@ -152,9 +165,12 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
                 }
             }
             if (!hasThisCard) {
-                cards.add(new Card(tempName, tempId).setMoney(money).setTime(time));
+                Card card = new Card(tempName, tempId).setMoney(money).setTime(time);
+                cards.add(card);
                 controlList();
-                mCardsAdapter.notifyDataSetChanged();
+                mCardsAdapter.notifyItemInserted(cards.size());
+                // 保存到数据库中
+                DatabaseUtils.saveCard(card);
             }
         } else {
             Snackbar.make(mFab, "信息不匹配，不要乱试啊！", Snackbar.LENGTH_LONG)
@@ -162,6 +178,23 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
                     .setActionTextColor(getResources().getColor(R.color.accent_color))
                     .show();
         }
+    }
+
+    @Override
+    public void onItemRefreshSuccess(List<ConsumptionBean> consumptions, int position) {
+        mSwipeRefreshWidget.setRefreshing(false);
+        String money = consumptions.get(0).getBalance();
+        String time = consumptions.get(0).getTime();
+        cards.set(position, cards.get(position).setMoney(money).setTime(time));
+        mCardsAdapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void onItemRefreshFail(RetrofitError e, int position) {
+        mSwipeRefreshWidget.setRefreshing(false);
+        e.printStackTrace();
+        cards.set(position, cards.get(position).setMoney("0").setTime("数据请求出错"));
+        mCardsAdapter.notifyItemChanged(position);
     }
 
     @Override
@@ -191,5 +224,13 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, View.O
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        if (cards.size() > 0)
+            cardPresenter.refresh(cards);
+        else
+            mSwipeRefreshWidget.setRefreshing(false);
     }
 }
