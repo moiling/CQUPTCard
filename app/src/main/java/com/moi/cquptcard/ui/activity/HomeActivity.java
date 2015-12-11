@@ -78,6 +78,7 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
     protected void onDestroy() {
         super.onDestroy();
         consumptionPresenter.onRelieveView();
+        cardPresenter.onRelieveView();
     }
 
     private void initToolbar() {
@@ -94,6 +95,7 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
         mFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
         mFab.setOnClickListener(this);
         mSwipeRefreshWidget.setOnRefreshListener(this);
+        mSwipeRefreshWidget.setColorSchemeColors(getResources().getColor(R.color.accent_color));
     }
 
     private void controlList() {
@@ -215,8 +217,15 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
                                 super.onPositive(dialog);
                                 tempName = edName.getText().toString();
                                 tempId = edId.getText().toString();
-                                // 传1表示每次获取最新一页数据，然后获取第一条就可以了
-                                consumptionPresenter.load(tempId, 1 + "");
+                                if (tempName.isEmpty() || tempId.isEmpty()) {
+                                    Snackbar.make(mFab, "不能为空呀！", Snackbar.LENGTH_LONG)
+                                            .setAction("OK", null)
+                                            .setActionTextColor(getResources().getColor(R.color.accent_color))
+                                            .show();
+                                } else {
+                                    // 传1表示每次获取最新一页数据，然后获取第一条就可以了
+                                    consumptionPresenter.load(tempId, 1 + "");
+                                }
                             }
                         })
                         .show();
@@ -228,9 +237,10 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
 
     @Override
     public void onRefresh() {
-        if (cards.size() > 0)
+        if (cards.size() > 0) {
+            mCardsAdapter.notifyItemRangeChanged(0, cards.size());
             cardPresenter.refresh(cards);
-        else
+        } else
             mSwipeRefreshWidget.setRefreshing(false);
     }
 }

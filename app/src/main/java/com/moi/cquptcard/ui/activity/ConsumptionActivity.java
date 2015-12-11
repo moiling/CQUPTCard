@@ -42,7 +42,6 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
     public static void actionStart(Context context, String id) {
         Intent intent = new Intent(context, ConsumptionActivity.class);
         intent.putExtra("id", id);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         context.startActivity(intent);
     }
 
@@ -59,28 +58,46 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
             consumptionPresenter.load(id, page + "");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        consumptionPresenter.onRelieveView();
+    }
+
     private void initContent() {
         mAdapter = new ConsumptionAdapter(this, consumptionBeans);
         mConsumptionList.setLayoutManager(new LinearLayoutManager(this));
         mConsumptionList.setAdapter(mAdapter);
+        mConsumptionList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager lm = (LinearLayoutManager) mConsumptionList.getLayoutManager();
+                int lastPosition = lm.findLastVisibleItemPosition();
+                if (lastPosition == mAdapter.getItemCount() - 1 && !mSwipeRefreshWidget.isRefreshing()) {
+                    consumptionPresenter.load(id, page + "");
+                }
+            }
+        });
         mSwipeRefreshWidget.setOnRefreshListener(this);
+        mSwipeRefreshWidget.setColorSchemeColors(getResources().getColor(R.color.accent_color));
     }
 
     private void initToolbar() {
         mToolbar.setTitle("流水线");
         setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(getResources().getDrawable(R.mipmap.ic_back));
+        mToolbar.setNavigationOnClickListener(v -> finish());
     }
 
     @Override
     public void onProcess() {
-        // 避免双螺旋
         if (!mSwipeRefreshWidget.isRefreshing())
-            showProgress("加载中");
+            mSwipeRefreshWidget.setRefreshing(true);
     }
 
     @Override
     public void onFail(RetrofitError e) {
-        dismissProgress();
         mSwipeRefreshWidget.setRefreshing(false);
         e.printStackTrace();
         Snackbar.make(mToolbar, "我的天！居然出错了", Snackbar.LENGTH_LONG)
@@ -91,13 +108,13 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
 
     @Override
     public void onSuccess(List<ConsumptionBean> consumptions, String page) {
-        dismissProgress();
         mSwipeRefreshWidget.setRefreshing(false);
         // 如果是第一页(表示刷新，或者初始进入)就清空之前的数据
         if (page.equals("1"))
             consumptionBeans.clear();
         consumptionBeans.addAll(consumptions);
         mAdapter.notifyDataSetChanged();
+        this.page++;
     }
 
     @Override

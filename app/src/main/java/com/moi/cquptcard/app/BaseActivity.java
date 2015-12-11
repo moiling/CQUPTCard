@@ -43,6 +43,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void dismissProgress() {
-        if (dialog.isShowing()) dialog.dismiss();
+        if (dialog != null) if (dialog.isShowing()) dialog.dismiss();
     }
 }

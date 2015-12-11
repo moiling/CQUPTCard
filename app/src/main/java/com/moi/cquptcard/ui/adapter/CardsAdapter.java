@@ -1,5 +1,6 @@
 package com.moi.cquptcard.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
@@ -53,7 +54,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
             shouldDelete = true;
             cards.remove(i);
             notifyItemRemoved(i);
-            Snackbar snackbar = Snackbar.make(holder.ripple, "已删除" + name, Snackbar.LENGTH_LONG)
+            Snackbar snackbar = Snackbar.make(((Activity) mContext).findViewById(R.id.home_fab), "已删除" + name, Snackbar.LENGTH_LONG)
                     .setAction("UNDO", view -> {
                         shouldDelete = false;
                         cards.add(i, card);

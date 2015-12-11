@@ -1,8 +1,8 @@
 package com.moi.cquptcard.util;
 
 import android.content.Context;
-import android.util.Config;
 
+import com.moi.cquptcard.BuildConfig;
 import com.moi.cquptcard.config.Api;
 
 import retrofit.RestAdapter;
@@ -26,7 +26,7 @@ public class RetrofitUtils {
                     builder.setConverter(new GsonConverter(GsonUtils.newInstance()));
                     builder.setClient(new OkClient(OkHttpUtils.getInstance(context)));
                     builder.setLogLevel(
-                            Config.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE);
+                            BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE);
                     singleton = builder.build();
                 }
             }

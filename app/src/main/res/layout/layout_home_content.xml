@@ -36,7 +36,6 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         app:statusBarBackground="@color/tans_color">
 
         <android.support.design.widget.FloatingActionButton
