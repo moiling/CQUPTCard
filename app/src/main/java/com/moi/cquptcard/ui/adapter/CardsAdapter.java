@@ -27,6 +27,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
     private Context mContext;
     private List<Card> cards = new ArrayList<>();
     private boolean shouldDelete = false;
+    private boolean isDeleting = false;
 
     public CardsAdapter(Context context, List<Card> cards) {
         mContext = context;
@@ -52,25 +53,30 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         holder.ripple.setOnClickListener(v -> ConsumptionActivity.actionStart(mContext, card.getCardId()));
         holder.ripple.setOnLongClickListener(v -> {
             shouldDelete = true;
-            cards.remove(i);
-            notifyItemRemoved(i);
-            Snackbar snackbar = Snackbar.make(((Activity) mContext).findViewById(R.id.home_fab), "已删除" + name, Snackbar.LENGTH_LONG)
-                    .setAction("UNDO", view -> {
-                        shouldDelete = false;
-                        cards.add(i, card);
-                        notifyItemInserted(i);
-                    })
-                    .setActionTextColor(mContext.getResources().getColor(R.color.accent_color));
-            snackbar.setCallback(new Snackbar.Callback() {
-                @Override
-                public void onDismissed(Snackbar snackbar, int event) {
-                    super.onDismissed(snackbar, event);
-                    if (shouldDelete) {
-                        DatabaseUtils.deleteCard(card);
+            if (!isDeleting) {
+                isDeleting = true;
+                cards.remove(i);
+                notifyItemRemoved(i);
+                Snackbar snackbar = Snackbar.make(((Activity) mContext).findViewById(R.id.home_fab), "已删除" + name, Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", view -> {
+                            shouldDelete = false;
+                            cards.add(i, card);
+                            notifyItemInserted(i);
+                            isDeleting = false;
+                        })
+                        .setActionTextColor(mContext.getResources().getColor(R.color.accent_color));
+                snackbar.setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        super.onDismissed(snackbar, event);
+                        if (shouldDelete) {
+                            DatabaseUtils.deleteCard(card);
+                            isDeleting = false;
+                        }
                     }
-                }
-            });
-            snackbar.show();
+                });
+                snackbar.show();
+            }
             return false;
         });
     }

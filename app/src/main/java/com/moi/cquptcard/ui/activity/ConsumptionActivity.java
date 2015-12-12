@@ -15,6 +15,7 @@ import com.moi.cquptcard.model.bean.ConsumptionBean;
 import com.moi.cquptcard.presenter.ConsumptionPresenter;
 import com.moi.cquptcard.ui.adapter.ConsumptionAdapter;
 import com.moi.cquptcard.ui.view.IConsumptionVu;
+import com.moi.cquptcard.ui.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,8 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
     // 这接口的第一页居然page不是0……而是1
     private int page = 1;
     private String id;
+    // 时候正在加载
+    private boolean isLoading = false;
 
     public static void actionStart(Context context, String id) {
         Intent intent = new Intent(context, ConsumptionActivity.class);
@@ -67,6 +70,7 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
     private void initContent() {
         mAdapter = new ConsumptionAdapter(this, consumptionBeans);
         mConsumptionList.setLayoutManager(new LinearLayoutManager(this));
+        mConsumptionList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mConsumptionList.setAdapter(mAdapter);
         mConsumptionList.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -74,7 +78,8 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager lm = (LinearLayoutManager) mConsumptionList.getLayoutManager();
                 int lastPosition = lm.findLastVisibleItemPosition();
-                if (lastPosition == mAdapter.getItemCount() - 1 && !mSwipeRefreshWidget.isRefreshing()) {
+                // 倒数第五个开始就加载后续，这样实现自动加载
+                if (lastPosition >= mAdapter.getItemCount() - 5 && !isLoading) {
                     consumptionPresenter.load(id, page + "");
                 }
             }
@@ -92,12 +97,13 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
 
     @Override
     public void onProcess() {
-        if (!mSwipeRefreshWidget.isRefreshing())
-            mSwipeRefreshWidget.setRefreshing(true);
+        // 为了自动加载的感觉，去掉进度条
+        isLoading = true;
     }
 
     @Override
     public void onFail(RetrofitError e) {
+        isLoading = false;
         mSwipeRefreshWidget.setRefreshing(false);
         e.printStackTrace();
         Snackbar.make(mToolbar, "我的天！居然出错了", Snackbar.LENGTH_LONG)
@@ -108,6 +114,7 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
 
     @Override
     public void onSuccess(List<ConsumptionBean> consumptions, String page) {
+        isLoading = false;
         mSwipeRefreshWidget.setRefreshing(false);
         // 如果是第一页(表示刷新，或者初始进入)就清空之前的数据
         if (page.equals("1"))

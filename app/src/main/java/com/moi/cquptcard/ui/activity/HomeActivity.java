@@ -84,6 +84,7 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
     private void initToolbar() {
         mToolbar.setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(getResources().getDrawable(R.mipmap.ic_card));
     }
 
     private void initContent() {
@@ -92,7 +93,8 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
         mCardList.setAdapter(mCardsAdapter);
         // 根据时候有一卡通来判断是否显示List
         controlList();
-        mFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+        mFab.setColorFilter(getResources().getColor(R.color.white));
+        mFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accent_color)));
         mFab.setOnClickListener(this);
         mSwipeRefreshWidget.setOnRefreshListener(this);
         mSwipeRefreshWidget.setColorSchemeColors(getResources().getColor(R.color.accent_color));
