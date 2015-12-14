@@ -240,7 +240,6 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
     @Override
     public void onRefresh() {
         if (cards.size() > 0) {
-            mCardsAdapter.notifyItemRangeChanged(0, cards.size());
             cardPresenter.refresh(cards);
         } else
             mSwipeRefreshWidget.setRefreshing(false);

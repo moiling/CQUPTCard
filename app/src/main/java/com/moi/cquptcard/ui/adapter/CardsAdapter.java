@@ -56,12 +56,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
             if (!isDeleting) {
                 isDeleting = true;
                 cards.remove(i);
+                // 这里通知第i个元素被删除了，但是它只是执行动画，并没有更改保存的数据
                 notifyItemRemoved(i);
+                // 通知第i个元素之后的所有元素都改变了，这里改变数据
+                notifyItemRangeChanged(i, cards.size());
                 Snackbar snackbar = Snackbar.make(((Activity) mContext).findViewById(R.id.home_fab), "已删除" + name, Snackbar.LENGTH_LONG)
                         .setAction("UNDO", view -> {
                             shouldDelete = false;
                             cards.add(i, card);
                             notifyItemInserted(i);
+                            notifyItemRangeChanged(i, cards.size());
                             isDeleting = false;
                         })
                         .setActionTextColor(mContext.getResources().getColor(R.color.accent_color));

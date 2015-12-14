@@ -49,7 +49,6 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<ConsumptionAdapter.
         holder.balance.setText(balance);
         holder.place.setText(place);
         holder.placeDetail.setText(placeDetail);
-
     }
 
     @Override
