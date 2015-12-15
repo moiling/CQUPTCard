@@ -12,7 +12,7 @@
     android:layout_marginRight="12dp"
     android:layout_marginTop="14dp"
     android:clickable="false"
-    app:cardBackgroundColor="#646464"
+    app:cardBackgroundColor="#3d98ce"
     app:cardCornerRadius="4dp"
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
@@ -21,7 +21,7 @@
         android:id="@+id/ripple"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:mrl_rippleColor="@color/Gray"
+        app:mrl_rippleColor="#37b5ff"
         app:mrl_rippleDuration="500">
 
         <LinearLayout
@@ -53,7 +53,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="24dp"
-                    android:textColor="@color/accent_color"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
                     android:textSize="20sp"
                     tools:text="37.5元" />
 
@@ -70,7 +71,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="24dp"
                     android:text="数据统计时间"
-                    android:textColor="#bbb" />
+                    android:textColor="#99ffffff" />
 
                 <TextView
                     android:id="@+id/tv_time"
@@ -78,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="24dp"
-                    android:textColor="#bbb"
+                    android:textColor="#99ffffff"
                     tools:text="2015-11-22 12:13" />
 
             </RelativeLayout>
