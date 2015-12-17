@@ -18,9 +18,8 @@
     <color name="primary_dark_color">#212121</color>
     <color name="accent_color">#fb941e</color>
 
-    <color name="title_green">#7BCECA</color>
-    <color name="red_primary_color">#ff9182</color>
-    <color name="blue_primary_color">#61a6d6</color>
+    <color name="primary_blue">#3d98ce</color>
+    <color name="primary_light_blue">#37b5ff</color>
 
     <color name="Gray">#bbbbbb</color>
 </resources>

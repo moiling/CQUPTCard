@@ -41,14 +41,29 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<ConsumptionAdapter.
         String money = consumption.getMoney();
         String balance = consumption.getBalance();
         String place = consumption.getPlace();
-        String placeDetail = consumption.getPlaceDetail();
 
         holder.time.setText(time);
-        holder.type.setText(type);
+        // +钱和-钱分开显示
+        if (type.equals("消费")) {
+            // 先去掉有些本身就有的"-"
+            money = money.replace("-", "");
+            money = "-" + money;
+            holder.money.setTextColor(mContext.getResources().getColor(R.color.accent_color));
+        } else {
+            if (position + 1 <= consumptionBeans.size() - 1) {
+                boolean useMoney = Double.valueOf(consumptionBeans.get(position + 1).getBalance()) - Double.valueOf(balance) > 0;
+                // 先去掉有些本身就有的"-"
+                money = money.replace("-", "");
+                money = useMoney ? "-" + money : "+" + money;
+                holder.money.setTextColor(useMoney ? mContext.getResources().getColor(R.color.accent_color) : mContext.getResources().getColor(R.color.primary_blue));
+            } else {
+                holder.money.setTextColor(mContext.getResources().getColor(R.color.primary_blue));
+            }
+        }
         holder.money.setText(money);
-        holder.balance.setText(balance);
-        holder.place.setText(place);
-        holder.placeDetail.setText(placeDetail);
+        if (!place.isEmpty())
+            holder.place.setText(place);
+        else holder.place.setText("未知地点");
     }
 
     @Override
@@ -60,20 +75,14 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<ConsumptionAdapter.
 
         MaterialRippleLayout ripple;
         TextView time;
-        TextView type;
         TextView money;
-        TextView balance;
         TextView place;
-        TextView placeDetail;
 
         public ConsumptionViewHolder(View itemView) {
             super(itemView);
             time = (TextView) itemView.findViewById(R.id.tv_time);
-            type = (TextView) itemView.findViewById(R.id.tv_type);
             money = (TextView) itemView.findViewById(R.id.tv_money);
-            balance = (TextView) itemView.findViewById(R.id.tv_balance);
             place = (TextView) itemView.findViewById(R.id.tv_place);
-            placeDetail = (TextView) itemView.findViewById(R.id.tv_place_detail);
             ripple = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
         }
     }

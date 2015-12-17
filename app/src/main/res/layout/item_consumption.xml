@@ -15,68 +15,43 @@
         app:mrl_rippleColor="@color/Gray"
         app:mrl_rippleDuration="500">
 
-        <LinearLayout
+        <RelativeLayout
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="24dp"
-                android:textColor="@color/secondary_text"
-                tools:text="2015-11-27 21:16" />
-
-            <TextView
-                android:id="@+id/tv_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="24dp"
-                android:textColor="@color/secondary_text"
-                tools:text="2015-11-27 21:16" />
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/tv_money"
+                tools:text="7元"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:textSize="28sp"
+                android:textColor="@color/primary_blue"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="24dp"
-                android:textColor="@color/secondary_text"
-                tools:text="2015-11-27 21:16" />
-
-            <TextView
-                android:id="@+id/tv_balance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="24dp"
-                android:textColor="@color/secondary_text"
-                tools:text="2015-11-27 21:16" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tv_place"
+                tools:text="千喜鹤"
+                android:textSize="18sp"
+                android:textColor="@color/primary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="24dp"
-                android:textColor="@color/secondary_text"
-                tools:text="2015-11-27 21:16" />
+                />
 
             <TextView
-                android:id="@+id/tv_place_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="24dp"
+                android:id="@+id/tv_time"
+                android:layout_marginTop="12dp"
+                tools:text="2015-11-27 21:16"
                 android:textColor="@color/secondary_text"
-                tools:text="2015-11-27 21:16" />
+                android:layout_below="@id/tv_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </com.balysv.materialripple.MaterialRippleLayout>
 

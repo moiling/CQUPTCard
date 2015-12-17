@@ -39,8 +39,10 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
     // 这接口的第一页居然page不是0……而是1
     private int page = 1;
     private String id;
-    // 时候正在加载
+    // 是否正在加载
     private boolean isLoading = false;
+    // 是否滑到最底o
+    private boolean isBottom = false;
 
     public static void actionStart(Context context, String id) {
         Intent intent = new Intent(context, ConsumptionActivity.class);
@@ -82,6 +84,7 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
                 if (lastPosition >= mAdapter.getItemCount() - 5 && !isLoading) {
                     consumptionPresenter.load(id, page + "");
                 }
+                isBottom = lastPosition == mAdapter.getItemCount() - 1;
             }
         });
         mSwipeRefreshWidget.setOnRefreshListener(this);
@@ -89,7 +92,7 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
     }
 
     private void initToolbar() {
-        mToolbar.setTitle("流水线");
+        mToolbar.setTitle("花钱如流水");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(getResources().getDrawable(R.mipmap.ic_back));
         mToolbar.setNavigationOnClickListener(v -> finish());
@@ -106,10 +109,13 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
         isLoading = false;
         mSwipeRefreshWidget.setRefreshing(false);
         e.printStackTrace();
-        Snackbar.make(mToolbar, "我的天！居然出错了", Snackbar.LENGTH_LONG)
-                .setAction("OK", null)
-                .setActionTextColor(getResources().getColor(R.color.accent_color))
-                .show();
+        // 滑到底部再弹出错误信息，不要一直弹！
+        if (isBottom) {
+            Snackbar.make(mToolbar, "信息未能正确GET", Snackbar.LENGTH_LONG)
+                    .setAction("OK", null)
+                    .setActionTextColor(getResources().getColor(R.color.accent_color))
+                    .show();
+        }
     }
 
     @Override
@@ -127,9 +133,11 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
     @Override
     public void onRefresh() {
         // 刷新的话……就请求最新数据吧
-        if (!id.isEmpty())
+        if (!id.isEmpty()) {
             consumptionPresenter.load(id, 1 + "");
-        else
+            // 还原page
+            page = 1;
+        } else
             mSwipeRefreshWidget.setRefreshing(false);
     }
 }
