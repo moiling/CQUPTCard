@@ -28,22 +28,22 @@ public class ConsumptionPresenter {
     }
 
     public void load(final String userID, final String page) {
-        v.onProcess();
+        if (v != null) v.onProcess();
         consumptionModel.loadConsumption(userID, page, new Callback<List<ConsumptionBean>>() {
             @Override
             public void success(List<ConsumptionBean> consumptionBeans, Response response) {
-                v.onSuccess(consumptionBeans, page);
+                if (v != null) v.onSuccess(consumptionBeans, page);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                v.onFail(error);
+                if (v != null) v.onFail(error);
             }
         });
     }
 
     public void onRelieveView() {
-        v = null;
+        if (v != null) v = null;
     }
 
 }

@@ -3,18 +3,34 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="AppTheme.Base">
         <!-- Customize your theme here. -->
+        <!-- 滑动返回 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+        <!-- 字体 -->
+        <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
         <item name="android:listDivider">@drawable/divider_bg</item>
     </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.NoActionBar">
         <!-- Actionbar color -->
         <item name="colorPrimary">@color/primary_color</item>
-        <!--Status bar color-->
+        <!-- Status bar color -->
         <item name="colorPrimaryDark">@color/primary_color</item>
         <item name="android:windowBackground">@color/primary_color</item>
         <item name="colorAccent">@color/primary_color</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="MainTheme" parent="AppTheme">
+        <!-- 滑动返回的主页 -->
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
+    <!-- 字体 -->
+    <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
+        <item name="fontPath">fonts/font_fangzheng_light.TTF</item>
     </style>
 
     <style name="EditTheme" parent="Theme.AppCompat.NoActionBar">

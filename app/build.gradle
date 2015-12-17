@@ -51,4 +51,8 @@ dependencies {
     compile 'com.google.code.gson:gson:2.4'
     // db
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    // swipeBack
+    compile 'com.jude:swipebackhelper:2.1.5'
+    // fonts
+    compile 'uk.co.chrisjenx:calligraphy:2.1.0'
 }

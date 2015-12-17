@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jude.swipbackhelper.SwipeBackHelper;
 import com.moi.cquptcard.R;
 import com.moi.cquptcard.app.BaseActivity;
 import com.moi.cquptcard.model.bean.Card;
@@ -61,6 +62,9 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
         ButterKnife.bind(this);
         consumptionPresenter = new ConsumptionPresenter(this);
         cardPresenter = new CardPresenter(this);
+        // 主页关闭滑动返回
+        SwipeBackHelper.getCurrentPage(this).setSwipeBackEnable(false);
+
         initToolbar();
         initContent();
         initData();

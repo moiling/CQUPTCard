@@ -1,11 +1,16 @@
 package com.moi.cquptcard.app;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.jude.swipbackhelper.SwipeBackHelper;
 import com.moi.cquptcard.R;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  *
@@ -20,6 +25,21 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // 将当前的Activity加入数组中
         APP.getInstance().addActivity(this);
+        // 滑动返回
+        SwipeBackHelper.onCreate(this);
+        // 字体
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/font_fangzheng_light.TTF")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // 滑动返回
+        SwipeBackHelper.onPostCreate(this);
     }
 
     @Override
@@ -27,6 +47,14 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         // 将当前的Activity从数组中移除
         APP.getInstance().removeActivity(this);
+        // 滑动返回
+        SwipeBackHelper.onDestroy(this);
+    }
+
+    // 字体
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     public void showProgress(String title) {

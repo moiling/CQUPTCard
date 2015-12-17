@@ -35,19 +35,19 @@ public class CardPresenter {
             consumptionModel.loadConsumption(cards.get(i).getCardId(), String.valueOf(1), new Callback<List<ConsumptionBean>>() {
                 @Override
                 public void success(List<ConsumptionBean> consumptionBeen, Response response) {
-                    v.onItemRefreshSuccess(consumptionBeen, finalI);
+                    if (v != null) v.onItemRefreshSuccess(consumptionBeen, finalI);
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    v.onItemRefreshFail(error, finalI);
+                    if (v != null) v.onItemRefreshFail(error, finalI);
                 }
             });
         }
     }
 
     public void onRelieveView() {
-        v = null;
+        if (v != null) v = null;
     }
 
 }
