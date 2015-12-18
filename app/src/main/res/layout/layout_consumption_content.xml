@@ -3,7 +3,8 @@
     android:id="@+id/content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_widget"
@@ -18,7 +19,8 @@
             android:fadeScrollbars="true"
             android:scrollbars="vertical"
             android:overScrollMode="always"
-            android:scrollbarStyle="outsideOverlay"/>
+            android:scrollbarStyle="outsideOverlay"
+            tools:listitem="@layout/item_consumption"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

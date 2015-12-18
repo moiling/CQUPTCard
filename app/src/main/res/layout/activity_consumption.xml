@@ -15,6 +15,12 @@
 
         <include layout="@layout/layout_consumption_content"/>
 
+        <!-- toolbar下方阴影 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/shadow" />
+
     </FrameLayout>
 
 </RelativeLayout>

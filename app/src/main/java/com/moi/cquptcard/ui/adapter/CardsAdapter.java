@@ -1,8 +1,6 @@
 package com.moi.cquptcard.ui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.moi.cquptcard.R;
 import com.moi.cquptcard.model.bean.Card;
 import com.moi.cquptcard.ui.activity.ConsumptionActivity;
-import com.moi.cquptcard.util.DatabaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +23,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
 
     private Context mContext;
     private List<Card> cards = new ArrayList<>();
-    private boolean shouldDelete = false;
-    private boolean isDeleting = false;
 
     public CardsAdapter(Context context, List<Card> cards) {
         mContext = context;
@@ -51,38 +46,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         holder.time.setText(time);
 
         holder.ripple.setOnClickListener(v -> ConsumptionActivity.actionStart(mContext, card.getCardId()));
-        holder.ripple.setOnLongClickListener(v -> {
-            shouldDelete = true;
-            if (!isDeleting) {
-                isDeleting = true;
-                cards.remove(i);
-                // 这里通知第i个元素被删除了，但是它只是执行动画，并没有更改保存的数据
-                notifyItemRemoved(i);
-                // 通知第i个元素之后的所有元素都改变了，这里改变数据
-                notifyItemRangeChanged(i, cards.size());
-                Snackbar snackbar = Snackbar.make(((Activity) mContext).findViewById(R.id.home_fab), "已删除" + name, Snackbar.LENGTH_LONG)
-                        .setAction("UNDO", view -> {
-                            shouldDelete = false;
-                            cards.add(i, card);
-                            notifyItemInserted(i);
-                            notifyItemRangeChanged(i, cards.size());
-                            isDeleting = false;
-                        })
-                        .setActionTextColor(mContext.getResources().getColor(R.color.accent_color));
-                snackbar.setCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar snackbar, int event) {
-                        super.onDismissed(snackbar, event);
-                        if (shouldDelete) {
-                            DatabaseUtils.deleteCard(card);
-                            isDeleting = false;
-                        }
-                    }
-                });
-                snackbar.show();
-            }
-            return false;
-        });
     }
 
     @Override

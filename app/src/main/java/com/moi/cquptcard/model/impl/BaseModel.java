@@ -21,7 +21,7 @@ public class BaseModel {
         return mExperApi;
     }
 
-    public  <T> T  createApi(Class<T> cls, Context context) {
+    public <T> T createApi(Class<T> cls, Context context) {
         return RetrofitUtils.createApi(context, cls);
     }
 

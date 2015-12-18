@@ -28,7 +28,7 @@
                 tools:text="7元"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 android:textColor="@color/primary_blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

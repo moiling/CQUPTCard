@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import com.moi.cquptcard.ui.adapter.CardsAdapter;
 import com.moi.cquptcard.ui.view.ICardVu;
 import com.moi.cquptcard.ui.view.IConsumptionVu;
 import com.moi.cquptcard.util.DatabaseUtils;
+import com.moi.cquptcard.util.RecyclerTouchCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,7 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
     private List<Card> cards = new ArrayList<>();
     private String tempName;
     private String tempId;
+    private boolean shouldDelete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,9 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
         mCardsAdapter = new CardsAdapter(this, cards);
         mCardList.setLayoutManager(new LinearLayoutManager(this));
         mCardList.setAdapter(mCardsAdapter);
+        // recycler的拖动
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerTouchCallback<>(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT, cards, mCardsAdapter, this::deleteCard));
+        itemTouchHelper.attachToRecyclerView(mCardList);
         // 根据时候有一卡通来判断是否显示List
         controlList();
         mFab.setColorFilter(getResources().getColor(R.color.white));
@@ -102,6 +108,36 @@ public class HomeActivity extends BaseActivity implements IConsumptionVu, ICardV
         mFab.setOnClickListener(this);
         mSwipeRefreshWidget.setOnRefreshListener(this);
         mSwipeRefreshWidget.setColorSchemeColors(getResources().getColor(R.color.accent_color));
+    }
+
+    private void deleteCard(int position) {
+        Card card = cards.get(position);
+        shouldDelete = true;
+        cards.remove(position);
+        // 这里通知第i个元素被删除了，但是它只是执行动画，并没有更改保存的数据
+        mCardsAdapter.notifyItemRemoved(position);
+        // 通知第i个元素之后的所有元素都改变了，这里改变数据
+        mCardsAdapter.notifyItemRangeChanged(position, cards.size());
+        controlList();
+        Snackbar snackbar = Snackbar.make(mFab, "已删除" + card.getName(), Snackbar.LENGTH_LONG)
+                .setAction("UNDO", view -> {
+                    shouldDelete = false;
+                    cards.add(position, card);
+                    controlList();
+                    mCardsAdapter.notifyItemInserted(position);
+                    mCardsAdapter.notifyItemRangeChanged(position, cards.size());
+                })
+                .setActionTextColor(getResources().getColor(R.color.accent_color));
+        snackbar.setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                super.onDismissed(snackbar, event);
+                if (shouldDelete) {
+                    DatabaseUtils.deleteCard(card);
+                }
+            }
+        });
+        snackbar.show();
     }
 
     private void controlList() {

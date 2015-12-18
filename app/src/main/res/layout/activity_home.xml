@@ -3,7 +3,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                tools:context=".ui.activity.HomeActivity">
+                tools:context=".ui.activity.HomeActivity"
+                tools:menu="menu_home">
 
     <include
         android:id="@+id/toolbar"
