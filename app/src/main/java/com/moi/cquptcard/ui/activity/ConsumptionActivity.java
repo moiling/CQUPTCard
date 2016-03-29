@@ -41,8 +41,10 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
     private String id;
     // 是否正在加载
     private boolean isLoading = false;
-    // 是否滑到最底o
+    // 是否滑到最底
     private boolean isBottom = false;
+    // 时候向底端滑动
+    private boolean isSlidingToEnd = false;
 
     public static void actionStart(Context context, String id) {
         Intent intent = new Intent(context, ConsumptionActivity.class);
@@ -74,17 +76,23 @@ public class ConsumptionActivity extends BaseActivity implements IConsumptionVu,
         mConsumptionList.setLayoutManager(new LinearLayoutManager(this));
         mConsumptionList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mConsumptionList.setAdapter(mAdapter);
-        mConsumptionList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mConsumptionList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
                 LinearLayoutManager lm = (LinearLayoutManager) mConsumptionList.getLayoutManager();
                 int lastPosition = lm.findLastVisibleItemPosition();
                 // 倒数第五个开始就加载后续，这样实现自动加载
-                if (lastPosition >= mAdapter.getItemCount() - 5 && !isLoading) {
+                if (lastPosition >= lm.getItemCount() - 5 && !isLoading && isSlidingToEnd) {
                     consumptionPresenter.load(id, page + "");
                 }
                 isBottom = lastPosition == mAdapter.getItemCount() - 1;
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                isSlidingToEnd = (dx > 0 || dy > 0);
             }
         });
         mSwipeRefreshWidget.setOnRefreshListener(this);
